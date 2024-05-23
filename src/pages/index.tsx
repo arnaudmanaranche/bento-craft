@@ -135,7 +135,7 @@ const Home = () => {
             max={8}
             id="columns"
             type="range"
-            onChange={(e) => setColNumber(e.target.value)}
+            onChange={(e) => setColNumber(e.target.value as unknown as number)}
           />
           <label htmlFor="raws">Row</label>
           <input
@@ -144,7 +144,7 @@ const Home = () => {
             id="raws"
             disabled={gridFlow === "row"}
             type="range"
-            onChange={(e) => setRawNumber(e.target.value)}
+            onChange={(e) => setRawNumber(e.target.value as unknown as number)}
           />
           <label htmlFor="gap">Gap</label>
           <input
@@ -152,7 +152,7 @@ const Home = () => {
             max={8}
             id="gap"
             type="range"
-            onChange={(e) => setGapNumber(e.target.value)}
+            onChange={(e) => setGapNumber(e.target.value as unknown as number)}
           />
         </form>
         <div className="flex-1" id="container">
