@@ -14,14 +14,20 @@ export interface BentoState extends InitialBentoState {
     columnNumber,
     rowNumber,
     gap,
+    template,
   }: {
     columnNumber?: number
     rowNumber?: number
     gap?: number
+    template?: Grid
   }) => void
   setColumnNumber: (value: number) => void
   setGap: (value: number) => void
   setRowNumber: (value: number) => void
+  setSelectCell: (value: [number, number]) => void
+  unSetSelectCell: (index: number) => void
+  unSetAllSelectCells: () => void
+  selectedCells: Array<[number, number]>
 }
 
 export const useBentoStore = create<BentoState>()((set) => {
@@ -33,11 +39,17 @@ export const useBentoStore = create<BentoState>()((set) => {
 
   return {
     ...DEFAULT_PROPS,
-    setBento: () =>
-      set(() => {
-        // const col = getRandomNumberFromInterval(3, 8)
-        // const row = getRandomNumberFromInterval(3, 8)
-        // const gap = getRandomEvenNumber()
+    setBento: (element) =>
+      set((state) => {
+        if (element.template) {
+          return {
+            bento: generateRandomGrid({
+              colNumber: state.columnNumber,
+              rowNumber: state.rowNumber,
+              template: element.template,
+            }),
+          }
+        }
 
         return {
           bento: generateRandomGrid({
@@ -63,10 +75,36 @@ export const useBentoStore = create<BentoState>()((set) => {
         }),
       })),
     bento: [],
-
     setGap: (gap) =>
       set(() => ({
         gap,
       })),
+    // Merge properties
+    selectedCells: [],
+    setSelectCell: (element) => {
+      set((state) => {
+        return {
+          selectedCells: [...state.selectedCells, element],
+        }
+      })
+    },
+    unSetAllSelectCells: () => {
+      set(() => {
+        return {
+          selectedCells: [],
+        }
+      })
+    },
+    unSetSelectCell: (index) => {
+      set((state) => {
+        const copy = state.selectedCells
+
+        copy.splice(index, 1)
+
+        return {
+          selectedCells: [...copy],
+        }
+      })
+    },
   }
 })

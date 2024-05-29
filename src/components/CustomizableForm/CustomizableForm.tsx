@@ -1,9 +1,12 @@
 import { useCopyBentoCode } from '@/hooks/useCopyBentoCode'
 import { useBentoStore } from '@/store'
+
+import { useMergeCells } from '@/hooks/useMergeCells'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Cross1Icon, ExternalLinkIcon } from '@radix-ui/react-icons'
+import { Cross1Icon } from '@radix-ui/react-icons'
 import * as Slider from '@radix-ui/react-slider'
 import { useTheme } from 'next-themes'
+import { useMemo } from 'react'
 import { Toaster } from 'sonner'
 import { Button } from '../Button/Button'
 import { ToggleTheme } from '../ToggleTheme/ToggleTheme'
@@ -17,6 +20,12 @@ export function CustomizableForm() {
   const setGap = useBentoStore((state) => state.setGap)
   const { copy } = useCopyBentoCode()
   const { theme } = useTheme()
+  const { mergeCells } = useMergeCells()
+  const selectedCells = useBentoStore((state) => state.selectedCells)
+
+  const isCellsSelected = useMemo(() => {
+    return selectedCells.length <= 1
+  }, [selectedCells.length])
 
   return (
     <Dialog.Root>
@@ -107,9 +116,14 @@ export function CustomizableForm() {
               </div>
             </form>
           </div>
-          <Dialog.Trigger asChild>
-            <Button icon={<ExternalLinkIcon />}>Export</Button>
-          </Dialog.Trigger>
+          <div className="flex space-x-2">
+            <Button isDisabled={isCellsSelected} onClick={mergeCells}>
+              Merge selected cells
+            </Button>
+            <Dialog.Trigger asChild>
+              <Button>Export</Button>
+            </Dialog.Trigger>
+          </div>
         </div>
       </div>
       <Dialog.Portal>

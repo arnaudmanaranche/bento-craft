@@ -1,5 +1,6 @@
+import { useBentoStore } from '@/store'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useMemo } from 'react'
 
 export interface CellProps {
   rowIndex: number
@@ -8,7 +9,15 @@ export interface CellProps {
 }
 
 export function Cell({ rowIndex, columnIndex, size }: CellProps) {
-  const [isSelected, setSelected] = useState(false)
+  const selectedCells = useBentoStore((state) => state.selectedCells)
+  const setSelectCell = useBentoStore((state) => state.setSelectCell)
+  const unSetSelectCell = useBentoStore((state) => state.unSetSelectCell)
+
+  const isSelected = useMemo(() => {
+    return selectedCells.find(
+      (cell) => cell[0] === rowIndex && cell[1] === columnIndex
+    )
+  }, [columnIndex, rowIndex, selectedCells])
 
   const className = clsx(
     // size[0] is column span
@@ -26,11 +35,42 @@ export function Cell({ rowIndex, columnIndex, size }: CellProps) {
     <div
       key={[rowIndex, columnIndex].toString()}
       className={className}
-      onClick={() => {
-        setSelected((prevCheck) => !prevCheck)
+      data-row-index={rowIndex}
+      data-col-index={columnIndex}
+      onClick={(event) => {
+        if (isSelected) {
+          const index = selectedCells.findIndex(
+            (cell) => cell[0] === rowIndex && cell[1] === columnIndex
+          )
+
+          if (index > -1) {
+            unSetSelectCell(index)
+          }
+        } else {
+          const element = event.target as HTMLInputElement
+
+          setSelectCell([
+            parseInt(
+              element.attributes.getNamedItem('data-row-index')
+                ?.value as string,
+              10
+            ),
+            parseInt(
+              element.attributes.getNamedItem('data-col-index')
+                ?.value as string,
+              10
+            ),
+          ])
+        }
       }}
     >
-      <span>Cell {[rowIndex, columnIndex].toString()}</span>
+      <span
+        data-row-index={rowIndex}
+        data-col-index={columnIndex}
+        data-selected={isSelected}
+      >
+        Cell {[rowIndex, columnIndex].toString()}
+      </span>
     </div>
   )
 }

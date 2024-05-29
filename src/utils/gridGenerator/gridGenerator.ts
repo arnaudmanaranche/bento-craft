@@ -15,19 +15,20 @@ import {
   isLastRow,
   shouldSkipBlock,
 } from './gridGenerator.helpers'
+import type { Grid } from './gridGenerator.interface'
 import { BASE_BLOCK } from './gridGenerator.interface'
 
 const RANDOM_THRESHOLD_SPAN2 = 0.85
 const RANDOM_THRESHOLD_SPAN3 = 0.9
 
-function generateEmptyGrid({
-  colNumber,
-  rowNumber,
-}: {
+export interface GridLength {
   colNumber: number
   rowNumber: number
-}) {
-  const bento = []
+  template?: Grid
+}
+
+function generateEmptyGrid({ colNumber, rowNumber }: GridLength): Grid {
+  const grid = []
 
   for (let rowIndex = 0; rowIndex < rowNumber; rowIndex++) {
     const row: number[][] = []
@@ -36,19 +37,20 @@ function generateEmptyGrid({
       row.push(BASE_BLOCK)
     }
 
-    bento.push(row)
+    grid.push(row)
   }
 
-  return bento
+  return grid
 }
 
 export function generateRandomGrid({
   colNumber,
   rowNumber,
-}: {
-  colNumber: number
-  rowNumber: number
-}) {
+  template,
+}: GridLength) {
+  // If a predefined template is provided, no need to generate a random one.
+  if (template) return template
+
   const emptyGrid = generateEmptyGrid({ colNumber, rowNumber })
 
   for (let rowIndex = 0; rowIndex < rowNumber; rowIndex++) {
@@ -76,7 +78,6 @@ export function generateRandomGrid({
         }
       } else if (isLargerThan(randomNumber, RANDOM_THRESHOLD_SPAN2)) {
         // span-2
-
         if (
           !isLastColumn(columnIndex, row.length) &&
           isBlockAvailable(emptyGrid, columnIndex + 1, rowIndex) &&
