@@ -6,8 +6,8 @@ export function CustomizableForm() {
   const rowNumber = useBentoStore((state) => state.rowNumber)
   const setColumnNumber = useBentoStore((state) => state.setColumnNumber)
   const setRowNumber = useBentoStore((state) => state.setRowNumber)
-  const isFormLocked = useBentoStore((state) => state.isFormLocked)
-  const lockForm = useBentoStore((state) => state.lockForm)
+  const isFormFreezed = useBentoStore((state) => state.isFormFreezed)
+  const freezeForm = useBentoStore((state) => state.freezeForm)
   const gap = useBentoStore((state) => state.gap)
   const setGap = useBentoStore((state) => state.setGap)
   const setBento = useBentoStore((state) => state.setBento)
@@ -90,7 +90,7 @@ export function CustomizableForm() {
           <label htmlFor="lock">Lock values</label>
           <input
             onChange={() => {
-              lockForm(!isFormLocked)
+              freezeForm(!isFormFreezed)
             }}
             type="checkbox"
             id="lock"

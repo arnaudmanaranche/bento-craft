@@ -1,4 +1,6 @@
 import { create } from 'zustand'
+import { getRandomEvenNumber } from './utils/getRandomEvenNumber'
+import { getRandomNumberFromInterval } from './utils/getRandomNumberFromInterval'
 import { generateRandomGrid } from './utils/gridGenerator/gridGenerator'
 import type { Grid } from './utils/gridGenerator/gridGenerator.interface'
 
@@ -6,7 +8,7 @@ export interface BentoState {
   bento: Grid
   columnNumber: number
   gap: number
-  isFormLocked: boolean
+  isFormFreezed: boolean
   rowNumber: number
   setBento: ({
     columnNumber,
@@ -17,33 +19,23 @@ export interface BentoState {
     rowNumber?: number
     gap?: number
   }) => void
-  setColumnNumber: (columnNumber: number) => void
-  setGap: (gap: number) => void
-  lockForm: (value: boolean) => void
-  setRowNumber: (rowNumber: number) => void
-}
-
-function randomIntFromInterval(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
-function getRandomEvenNumber() {
-  const evenNumbers = [2, 4, 6, 8]
-  const randomIndex = Math.floor(Math.random() * evenNumbers.length)
-  return evenNumbers[randomIndex]
+  setColumnNumber: (value: number) => void
+  setGap: (value: number) => void
+  freezeForm: (value: boolean) => void
+  setRowNumber: (value: number) => void
 }
 
 export const useBentoStore = create<BentoState>()((set) => ({
-  isFormLocked: false,
-  lockForm: (isFormLocked) =>
+  isFormFreezed: false,
+  freezeForm: (isFormFreezed) =>
     set(() => ({
-      isFormLocked,
+      isFormFreezed,
     })),
   columnNumber: 6,
   rowNumber: 5,
   setBento: () =>
     set((state) => {
-      if (state.isFormLocked) {
+      if (state.isFormFreezed) {
         return {
           bento: generateRandomGrid({
             colNumber: state.columnNumber,
@@ -51,8 +43,8 @@ export const useBentoStore = create<BentoState>()((set) => ({
           }),
         }
       }
-      const col = randomIntFromInterval(3, 8)
-      const row = randomIntFromInterval(3, 8)
+      const col = getRandomNumberFromInterval(3, 8)
+      const row = getRandomNumberFromInterval(3, 8)
       const gap = getRandomEvenNumber()
 
       return {
