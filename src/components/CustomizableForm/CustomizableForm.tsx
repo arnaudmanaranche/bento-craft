@@ -2,6 +2,7 @@ import { useBentoStore } from '@/store'
 import { MoonIcon, SunIcon } from '@radix-ui/react-icons'
 import * as Slider from '@radix-ui/react-slider'
 import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
 
 export function CustomizableForm() {
   const columnNumber = useBentoStore((state) => state.columnNumber)
@@ -13,7 +14,16 @@ export function CustomizableForm() {
   const gap = useBentoStore((state) => state.gap)
   const setGap = useBentoStore((state) => state.setGap)
   const setBento = useBentoStore((state) => state.setBento)
+  const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
 
   return (
     <div className="flex flex-col items-start space-y-4 border-b-2 p-10">
