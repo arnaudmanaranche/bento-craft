@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>BentoCraft</title>
       </Head>
-      <ThemeProvider>
+      <ThemeProvider attribute="class">
         <Theme>
           <main>
             <header className="flex h-screen flex-col items-center bg-orient-700 p-10">
