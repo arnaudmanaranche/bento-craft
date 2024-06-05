@@ -8,7 +8,6 @@ export interface BentoState {
   bento: Grid
   columnNumber: number
   gap: number
-  isFormFreezed: boolean
   rowNumber: number
   setBento: ({
     columnNumber,
@@ -21,28 +20,14 @@ export interface BentoState {
   }) => void
   setColumnNumber: (value: number) => void
   setGap: (value: number) => void
-  freezeForm: (value: boolean) => void
   setRowNumber: (value: number) => void
 }
 
 export const useBentoStore = create<BentoState>()((set) => ({
-  isFormFreezed: false,
-  freezeForm: (isFormFreezed) =>
-    set(() => ({
-      isFormFreezed,
-    })),
   columnNumber: 6,
   rowNumber: 5,
   setBento: () =>
-    set((state) => {
-      if (state.isFormFreezed) {
-        return {
-          bento: generateRandomGrid({
-            colNumber: state.columnNumber,
-            rowNumber: state.rowNumber,
-          }),
-        }
-      }
+    set(() => {
       const col = getRandomNumberFromInterval(3, 8)
       const row = getRandomNumberFromInterval(3, 8)
       const gap = getRandomEvenNumber()

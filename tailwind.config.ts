@@ -9,20 +9,22 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
-        orient: {
-          '50': '#f3f8f8',
-          '100': '#e0eced',
-          '200': '#c4d9dd',
-          '300': '#9bbfc5',
-          '400': '#6b9ca5',
-          '500': '#50818a',
-          '600': '#456b75',
-          '700': '#3f5c65',
-          '800': '#374b53',
-          '900': '#324147',
-          '950': '#1e2a2e',
+      keyframes: {
+        overlayShow: {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
         },
+        contentShow: {
+          from: {
+            opacity: '0',
+            transform: 'translate(-50%, -48%) scale(0.96)',
+          },
+          to: { opacity: '1', transform: 'translate(-50%, -50%) scale(1)' },
+        },
+      },
+      animation: {
+        overlayShow: 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+        contentShow: 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
       },
     },
   },
