@@ -2,7 +2,7 @@
  * This file contains code copied from another source.
  *
  * Original Author: https://github.com/jean1591
- * Source File: ttps://github.com/jean1591/bento-generator/blob/main/src/utils/bentoGenerator.ts
+ * Source File: https://github.com/jean1591/bento-generator/blob/main/src/utils/bentoGenerator.ts
  *
  */
 
