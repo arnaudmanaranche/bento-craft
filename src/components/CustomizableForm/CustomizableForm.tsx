@@ -1,9 +1,11 @@
+import { useCopyBentoCode } from '@/hooks/useCopyBentoCode'
 import { useBentoStore } from '@/store'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Cross2Icon, ExternalLinkIcon } from '@radix-ui/react-icons'
+import { Cross1Icon, ExternalLinkIcon } from '@radix-ui/react-icons'
 import * as Slider from '@radix-ui/react-slider'
-import { Toaster, toast } from 'sonner'
-import Button from '../Button/Button'
+import { useTheme } from 'next-themes'
+import { Toaster } from 'sonner'
+import { Button } from '../Button/Button'
 import { ToggleTheme } from '../ToggleTheme/ToggleTheme'
 
 export function CustomizableForm() {
@@ -13,6 +15,8 @@ export function CustomizableForm() {
   const setRowNumber = useBentoStore((state) => state.setRowNumber)
   const gap = useBentoStore((state) => state.gap)
   const setGap = useBentoStore((state) => state.setGap)
+  const { copy } = useCopyBentoCode()
+  const { theme } = useTheme()
 
   return (
     <Dialog.Root>
@@ -109,35 +113,28 @@ export function CustomizableForm() {
         </div>
       </div>
       <Dialog.Portal>
-        <Toaster />
         <Dialog.Overlay className="fixed inset-0 bg-black/60 data-[state=open]:animate-overlayShow" />
         <Dialog.Content className="fixed left-[50%] top-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow">
-          <Dialog.Title className="my-4 text-lg text-[#111111]">
-            Export your bento
-          </Dialog.Title>
-          <div className="flex flex-col items-center space-y-2">
-            <Button
-              className="flex w-full justify-center rounded-full bg-black/80 p-4 font-bold text-white"
-              onClick={() => toast.info('Coming soon..')}
-            >
-              As code
-            </Button>
-            <Button
-              className="flex w-full flex-grow cursor-not-allowed justify-center rounded-full bg-black/40 p-4 font-bold text-white"
-              onClick={() => toast.info('Coming soon..')}
-            >
-              As image
-            </Button>
-          </div>
-          <Dialog.Close asChild>
-            <button
-              className="text-violet11 hover:bg-violet4 focus:shadow-violet7 absolute right-[10px] top-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
+          <div className="mb-10 flex items-center justify-between">
+            <Dialog.Title className="font-serif text-xl font-bold text-black">
+              Export your bento
+            </Dialog.Title>
+            <Dialog.Close
+              className="rounded-full p-2 text-black hover:bg-black/10 focus:shadow-[0_0_0_1px] focus:outline-none"
               aria-label="Close"
             >
-              <Cross2Icon />
-            </button>
-          </Dialog.Close>
+              <Cross1Icon />
+            </Dialog.Close>
+          </div>
+          <div className="flex w-full flex-col items-center space-y-2">
+            <Button stretch onClick={copy}>
+              As code
+            </Button>
+          </div>
         </Dialog.Content>
+        {/* eslint-disable-next-line */}
+        {/* @ts-expect-error: Theme is always defined as 'dark' or 'light' */}
+        <Toaster theme={theme} />
       </Dialog.Portal>
     </Dialog.Root>
   )

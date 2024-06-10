@@ -1,14 +1,15 @@
 import { create } from 'zustand'
-import { getRandomEvenNumber } from './utils/getRandomEvenNumber'
-import { getRandomNumberFromInterval } from './utils/getRandomNumberFromInterval'
 import { generateRandomGrid } from './utils/gridGenerator/gridGenerator'
 import type { Grid } from './utils/gridGenerator/gridGenerator.interface'
 
-export interface BentoState {
-  bento: Grid
+interface InitialBentoState {
   columnNumber: number
   gap: number
   rowNumber: number
+}
+
+export interface BentoState extends InitialBentoState {
+  bento: Grid
   setBento: ({
     columnNumber,
     rowNumber,
@@ -23,45 +24,49 @@ export interface BentoState {
   setRowNumber: (value: number) => void
 }
 
-export const useBentoStore = create<BentoState>()((set) => ({
-  columnNumber: 6,
-  rowNumber: 5,
-  setBento: () =>
-    set(() => {
-      const col = getRandomNumberFromInterval(3, 8)
-      const row = getRandomNumberFromInterval(3, 8)
-      const gap = getRandomEvenNumber()
+export const useBentoStore = create<BentoState>()((set) => {
+  const DEFAULT_PROPS: InitialBentoState = {
+    rowNumber: 4,
+    gap: 4,
+    columnNumber: 4,
+  }
 
-      return {
+  return {
+    ...DEFAULT_PROPS,
+    setBento: () =>
+      set(() => {
+        // const col = getRandomNumberFromInterval(3, 8)
+        // const row = getRandomNumberFromInterval(3, 8)
+        // const gap = getRandomEvenNumber()
+
+        return {
+          bento: generateRandomGrid({
+            colNumber: DEFAULT_PROPS.columnNumber,
+            rowNumber: DEFAULT_PROPS.rowNumber,
+          }),
+        }
+      }),
+    setColumnNumber: (columnNumber) =>
+      set((state) => ({
+        columnNumber,
         bento: generateRandomGrid({
-          colNumber: col,
-          rowNumber: row,
+          colNumber: state.columnNumber,
+          rowNumber: state.rowNumber,
         }),
-        rowNumber: row,
-        columnNumber: col,
+      })),
+    setRowNumber: (rowNumber) =>
+      set((state) => ({
+        rowNumber,
+        bento: generateRandomGrid({
+          colNumber: state.columnNumber,
+          rowNumber: state.rowNumber,
+        }),
+      })),
+    bento: [],
+
+    setGap: (gap) =>
+      set(() => ({
         gap,
-      }
-    }),
-  setColumnNumber: (columnNumber) =>
-    set((state) => ({
-      columnNumber,
-      bento: generateRandomGrid({
-        colNumber: state.columnNumber,
-        rowNumber: state.rowNumber,
-      }),
-    })),
-  setRowNumber: (rowNumber) =>
-    set((state) => ({
-      rowNumber,
-      bento: generateRandomGrid({
-        colNumber: state.columnNumber,
-        rowNumber: state.rowNumber,
-      }),
-    })),
-  bento: [],
-  gap: 4,
-  setGap: (gap) =>
-    set(() => ({
-      gap,
-    })),
-}))
+      })),
+  }
+})

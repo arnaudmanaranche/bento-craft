@@ -18,20 +18,20 @@ export function ToggleTheme(): ReactNode {
   return (
     <div className="flex items-center">
       <button
-        className="flex w-full items-center border-b-0 p-8 dark:border-b-2 dark:border-b-[#2d2d34] dark:bg-[#111111]"
-        onClick={() => {
-          setTheme('dark')
-        }}
-      >
-        <MoonIcon />
-      </button>
-      <button
         className="flex w-full items-center border-b-2 p-8 dark:border-b-0 dark:bg-[#111111]"
         onClick={() => {
           setTheme('light')
         }}
       >
         <SunIcon />
+      </button>
+      <button
+        className="flex w-full items-center border-b-0 p-8 dark:border-b-2 dark:border-b-[#2d2d34] dark:bg-[#111111]"
+        onClick={() => {
+          setTheme('dark')
+        }}
+      >
+        <MoonIcon />
       </button>
     </div>
   )

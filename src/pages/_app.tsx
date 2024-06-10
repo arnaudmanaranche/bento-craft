@@ -50,11 +50,11 @@ export default function App({ Component, pageProps }: AppProps) {
             ></rect>
           </svg>
           <div className="z-10 flex max-w-[724px] flex-grow flex-col items-center justify-center space-y-10">
-            <h1 className="relative font-serif text-6xl font-bold text-black">
-              BentoCraft
-              <div className="absolute -top-12 left-0 right-0 flex justify-center md:-right-24 md:-top-4 md:left-auto">
-                <p className="w-fit rounded-full bg-yellow-100 p-2 text-sm">
-                  Prototype
+            <h1 className="relative font-serif text-6xl font-bold">
+              <span className="homepage-title">BentoCraft</span>
+              <div className="absolute -top-12 left-0 right-0 flex justify-center md:-right-14 md:-top-4 md:left-auto">
+                <p className="w-fit rounded-full bg-yellow-100 p-2 text-sm text-black">
+                  Beta
                 </p>
               </div>
             </h1>
@@ -92,7 +92,6 @@ export default function App({ Component, pageProps }: AppProps) {
           </div>
         </ThemeProvider>
       </main>
-      <footer>Footer</footer>
     </Theme>
   )
 }
