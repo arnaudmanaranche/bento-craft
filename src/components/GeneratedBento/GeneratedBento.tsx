@@ -12,7 +12,7 @@ export function GeneratedBento({ bento }: GeneratedBentoProps): ReactNode {
   const gap = useBentoStore((state) => state.gap)
 
   return (
-    <div className={`grid grid-cols-${columnNumber} gap-${gap}`}>
+    <div className={`grid grid-cols-${columnNumber} gap-${gap}`} id="bento">
       {bento.map((row, rowIndex) =>
         row.map((size, columnIndex) =>
           size[0] !== 0 && size[1] !== 0 ? (

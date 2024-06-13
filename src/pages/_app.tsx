@@ -72,7 +72,7 @@ export default function App({ Component, pageProps }: AppProps) {
             </p>
             <Button
               onClick={() => {
-                if (window.matchMedia('(min-width: 400px)').matches) {
+                if (window.matchMedia('(min-width: 768px)').matches) {
                   push('/#main')
                 } else {
                   toast.info('Open the app on desktop')

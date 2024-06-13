@@ -1,5 +1,7 @@
+import { useBentoStore } from '@/store'
 import clsx from 'clsx'
-import { useState } from 'react'
+import type { BaseSyntheticEvent } from 'react'
+import { useMemo } from 'react'
 
 export interface CellProps {
   rowIndex: number
@@ -8,7 +10,15 @@ export interface CellProps {
 }
 
 export function Cell({ rowIndex, columnIndex, size }: CellProps) {
-  const [isSelected, setSelected] = useState(false)
+  const selectedCells = useBentoStore((state) => state.selectedCells)
+  const setSelectCell = useBentoStore((state) => state.setSelectCell)
+  const unSetSelectCell = useBentoStore((state) => state.unSetSelectCell)
+
+  const isSelected = useMemo(() => {
+    return selectedCells.find(
+      (cell) => cell[0] === rowIndex && cell[1] === columnIndex
+    )
+  }, [columnIndex, rowIndex, selectedCells])
 
   const className = clsx(
     // size[0] is column span
@@ -18,7 +28,7 @@ export function Cell({ rowIndex, columnIndex, size }: CellProps) {
     size[1] === 3 ? 'row-span-3' : '',
     size[1] === 2 ? 'row-span-2' : '',
     isSelected ? 'border-2 border-[#1D1D1D] dark:border-[#E9E9E9]' : '',
-    'rounded-lg min-h-20 flex items-center justify-center bg-[#E9E9E9] cursor-pointer text-[#1D1D1D]',
+    'rounded-lg min-h-40 flex items-center justify-center bg-[#E9E9E9] cursor-pointer text-[#1D1D1D]',
     'dark:text-white dark:bg-[#1D1D1D]'
   )
 
@@ -26,8 +36,31 @@ export function Cell({ rowIndex, columnIndex, size }: CellProps) {
     <div
       key={[rowIndex, columnIndex].toString()}
       className={className}
-      onClick={() => {
-        setSelected((prevCheck) => !prevCheck)
+      data-row-index={rowIndex}
+      data-col-index={columnIndex}
+      onClick={(event: BaseSyntheticEvent) => {
+        if (isSelected) {
+          const index = selectedCells.findIndex(
+            (cell) => cell[0] === rowIndex && cell[1] === columnIndex
+          )
+
+          if (index > -1) {
+            unSetSelectCell(index)
+          }
+        } else {
+          setSelectCell([
+            parseInt(
+              event.target.attributes.getNamedItem('data-row-index')
+                ?.value as string,
+              10
+            ),
+            parseInt(
+              event.target.attributes.getNamedItem('data-col-index')
+                ?.value as string,
+              10
+            ),
+          ])
+        }
       }}
     >
       <span>Cell {[rowIndex, columnIndex].toString()}</span>

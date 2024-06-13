@@ -11,6 +11,7 @@ export type ButtonProps = {
   as?: 'a' | 'button'
   children: ReactNode
   className?: string
+  isDisabled?: boolean
   stretch?: boolean
   href?: string
   icon?: ReactNode
@@ -26,10 +27,14 @@ export const Button = forwardRef<
     {
       as = 'button',
       href,
+      isDisabled = false,
       stretch = false,
 
       className = clsx(
-        'flex items-center rounded-full bg-black/80 p-4 font-bold text-white hover:bg-black/90 transition-colors',
+        'flex items-center rounded-full p-4 font-bold text-white transition-colors',
+        isDisabled
+          ? 'cursor-not-allowed bg-black/10 dark:bg-black/20 dark:text-white/40 hover:dark:bg-black/20 text-black/40 hover:bg-black/10'
+          : 'hover:bg-black/90 bg-black/80',
         stretch ? 'w-full justify-center' : null
       ),
       icon,
@@ -66,6 +71,7 @@ export const Button = forwardRef<
 
     return (
       <button
+        disabled={isDisabled}
         className={className}
         ref={ref as Ref<HTMLButtonElement>}
         {...props}
