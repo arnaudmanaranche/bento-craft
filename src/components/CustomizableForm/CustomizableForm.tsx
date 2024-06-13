@@ -30,7 +30,7 @@ export function CustomizableForm() {
   return (
     <Dialog.Root>
       <div className="flex flex-col items-start shadow-sm dark:shadow-[#2d2d34]">
-        <div className="mx-auto flex w-full max-w-7xl flex-col justify-between md:flex-row md:items-center">
+        <div className="mx-auto flex w-full max-w-7xl flex-col justify-between space-y-6 md:items-center lg:flex-row  lg:space-y-0">
           <div className="flex flex-col space-y-6 md:flex-row md:items-center md:space-x-6 md:space-y-0">
             <ToggleTheme />
             <form className="flex flex-col items-start">
@@ -116,7 +116,7 @@ export function CustomizableForm() {
               </div>
             </form>
           </div>
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 pb-8 lg:pb-0">
             <Button isDisabled={isCellsSelected} onClick={mergeCells}>
               Merge selected cells
             </Button>
