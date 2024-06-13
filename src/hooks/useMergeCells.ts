@@ -1,5 +1,4 @@
 import { useBentoStore } from '@/store'
-import { generateRandomGrid } from '@/utils/gridGenerator/gridGenerator'
 
 export function useMergeCells() {
   const bento = useBentoStore((state) => state.bento)
@@ -12,9 +11,9 @@ export function useMergeCells() {
   function mergeCells() {
     const copiedBento = [...bento]
 
-    const positions = selectedCells.map((values) => ({
-      rowIndex: values[0],
-      colIndex: values[1],
+    const positions = selectedCells.map(([rowIndex, colIndex]) => ({
+      rowIndex,
+      colIndex,
     }))
 
     const minRowIndex = Math.min(...positions.map((pos) => pos.rowIndex))
@@ -22,11 +21,10 @@ export function useMergeCells() {
     const minColIndex = Math.min(...positions.map((pos) => pos.colIndex))
     let maxColIndex = Math.max(...positions.map((pos) => pos.colIndex))
 
-    // Calculate the required rowspan and colspan
     positions.forEach((pos) => {
       const cell = copiedBento[pos.rowIndex][pos.colIndex]
-      const cellRowSpan = cell[1]
-      const cellColSpan = cell[0]
+      const cellRowSpan = cell.value[1]
+      const cellColSpan = cell.value[0]
 
       if (cellRowSpan + pos.rowIndex > maxRowIndex + 1) {
         maxRowIndex = cellRowSpan + pos.rowIndex - 1
@@ -39,22 +37,20 @@ export function useMergeCells() {
     const finalRowSpan = maxRowIndex - minRowIndex + 1
     const finalColSpan = maxColIndex - minColIndex + 1
 
-    copiedBento[minRowIndex][minColIndex] = [finalColSpan, finalRowSpan]
+    copiedBento[minRowIndex][minColIndex] = {
+      value: [finalColSpan, finalRowSpan],
+      className: '',
+    }
+
     for (let rowIndex = minRowIndex; rowIndex <= maxRowIndex; rowIndex++) {
       for (let colIndex = minColIndex; colIndex <= maxColIndex; colIndex++) {
         if (rowIndex !== minRowIndex || colIndex !== minColIndex) {
-          copiedBento[rowIndex][colIndex] = [0, 0]
+          copiedBento[rowIndex][colIndex] = { value: [0, 0], className: '' }
         }
       }
     }
 
-    const table = generateRandomGrid({
-      colNumber: 0,
-      rowNumber: 0,
-      template: copiedBento,
-    })
-
-    setBento({ columnNumber: 0, rowNumber: 0, template: table })
+    setBento({ columnNumber: 0, rowNumber: 0, template: bento })
     unSetAllSelectCells()
   }
 

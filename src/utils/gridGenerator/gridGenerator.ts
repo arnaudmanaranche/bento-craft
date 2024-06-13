@@ -1,4 +1,5 @@
 /**
+ *
  * This file contains code copied from another source.
  *
  * Original Author: https://github.com/jean1591
@@ -15,7 +16,7 @@ import {
   isLastRow,
   shouldSkipBlock,
 } from './gridGenerator.helpers'
-import type { Grid } from './gridGenerator.interface'
+import type { Grid, GridCell } from './gridGenerator.interface'
 import { BASE_BLOCK } from './gridGenerator.interface'
 
 const RANDOM_THRESHOLD_SPAN2 = 0.85
@@ -28,13 +29,13 @@ export interface GridLength {
 }
 
 function generateEmptyGrid({ colNumber, rowNumber }: GridLength): Grid {
-  const grid = []
+  const grid: Grid = []
 
   for (let rowIndex = 0; rowIndex < rowNumber; rowIndex++) {
-    const row: number[][] = []
+    const row: GridCell[] = []
 
     for (let columnIndex = 0; columnIndex < colNumber; columnIndex++) {
-      row.push(BASE_BLOCK)
+      row.push({ value: BASE_BLOCK, className: '' })
     }
 
     grid.push(row)
@@ -47,8 +48,7 @@ export function generateRandomGrid({
   colNumber,
   rowNumber,
   template,
-}: GridLength) {
-  // If a predefined template is provided, no need to generate a random one.
+}: GridLength): Grid {
   if (template) return template
 
   const emptyGrid = generateEmptyGrid({ colNumber, rowNumber })
@@ -60,45 +60,64 @@ export function generateRandomGrid({
       }
 
       const row = emptyGrid[rowIndex]
-
       const randomNumber = Math.random()
 
       if (isLargerThan(randomNumber, RANDOM_THRESHOLD_SPAN3)) {
-        // span-3
         if (canCreateColSpan3(emptyGrid, columnIndex, rowIndex)) {
-          // Merge three blocks horizontaly
-          emptyGrid[rowIndex][columnIndex] = [3, 1]
-          emptyGrid[rowIndex][columnIndex + 1] = [0, 0]
-          emptyGrid[rowIndex][columnIndex + 2] = [0, 0]
+          emptyGrid[rowIndex][columnIndex] = { value: [3, 1], className: '' }
+          emptyGrid[rowIndex][columnIndex + 1] = {
+            value: [0, 0],
+            className: '',
+          }
+          emptyGrid[rowIndex][columnIndex + 2] = {
+            value: [0, 0],
+            className: '',
+          }
         } else if (canCreateRowSpan3(emptyGrid, columnIndex, rowIndex)) {
-          // Merge three blocks verticaly
-          emptyGrid[rowIndex][columnIndex] = [1, 3]
-          emptyGrid[rowIndex + 1][columnIndex] = [0, 0]
-          emptyGrid[rowIndex + 2][columnIndex] = [0, 0]
+          emptyGrid[rowIndex][columnIndex] = { value: [1, 3], className: '' }
+          emptyGrid[rowIndex + 1][columnIndex] = {
+            value: [0, 0],
+            className: '',
+          }
+          emptyGrid[rowIndex + 2][columnIndex] = {
+            value: [0, 0],
+            className: '',
+          }
         }
       } else if (isLargerThan(randomNumber, RANDOM_THRESHOLD_SPAN2)) {
-        // span-2
         if (
           !isLastColumn(columnIndex, row.length) &&
           isBlockAvailable(emptyGrid, columnIndex + 1, rowIndex) &&
           !isLastRow(rowIndex, emptyGrid.length)
         ) {
-          // Merge two blocks horizontaly and verticaly
-          emptyGrid[rowIndex][columnIndex] = [2, 2]
-          emptyGrid[rowIndex][columnIndex + 1] = [0, 0]
-          emptyGrid[rowIndex + 1][columnIndex] = [0, 0]
-          emptyGrid[rowIndex + 1][columnIndex + 1] = [0, 0]
+          emptyGrid[rowIndex][columnIndex] = { value: [2, 2], className: '' }
+          emptyGrid[rowIndex][columnIndex + 1] = {
+            value: [0, 0],
+            className: '',
+          }
+          emptyGrid[rowIndex + 1][columnIndex] = {
+            value: [0, 0],
+            className: '',
+          }
+          emptyGrid[rowIndex + 1][columnIndex + 1] = {
+            value: [0, 0],
+            className: '',
+          }
         } else if (
           !isLastColumn(columnIndex, row.length) &&
           isBlockAvailable(emptyGrid, columnIndex + 1, rowIndex)
         ) {
-          // Merge two blocks horizontaly
-          emptyGrid[rowIndex][columnIndex] = [2, 1]
-          emptyGrid[rowIndex][columnIndex + 1] = [0, 0]
+          emptyGrid[rowIndex][columnIndex] = { value: [2, 1], className: '' }
+          emptyGrid[rowIndex][columnIndex + 1] = {
+            value: [0, 0],
+            className: '',
+          }
         } else if (!isLastRow(rowIndex, emptyGrid.length)) {
-          // Merge two blocks verticaly
-          emptyGrid[rowIndex][columnIndex] = [1, 2]
-          emptyGrid[rowIndex + 1][columnIndex] = [0, 0]
+          emptyGrid[rowIndex][columnIndex] = { value: [1, 2], className: '' }
+          emptyGrid[rowIndex + 1][columnIndex] = {
+            value: [0, 0],
+            className: '',
+          }
         }
       }
     }

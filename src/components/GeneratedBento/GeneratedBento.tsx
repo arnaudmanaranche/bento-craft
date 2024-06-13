@@ -15,12 +15,13 @@ export function GeneratedBento({ bento }: GeneratedBentoProps): ReactNode {
     <div className={`grid grid-cols-${columnNumber} gap-${gap}`} id="bento">
       {bento.map((row, rowIndex) =>
         row.map((size, columnIndex) =>
-          size[0] !== 0 && size[1] !== 0 ? (
+          size.value[0] !== 0 && size.value[1] !== 0 ? (
             <Cell
               key={[rowIndex, columnIndex].toString()}
-              size={size}
+              size={size.value}
               columnIndex={columnIndex}
               rowIndex={rowIndex}
+              className={size.className}
             />
           ) : null
         )

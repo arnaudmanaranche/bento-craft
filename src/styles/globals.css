@@ -11,3 +11,18 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+.bg-stripes-purple {
+  background-color: #c084fc1a;
+  background-image: linear-gradient(
+    135deg,
+    #a855f780 10%,
+    #0000 0,
+    #0000 50%,
+    #a855f780 0,
+    #a855f780 60%,
+    #0000 0,
+    #0000
+  );
+  background-size: 7.07px 7.07px;
+}

@@ -1,4 +1,5 @@
 /**
+ *
  * This file contains code copied from another source.
  *
  * Original Author: https://github.com/jean1591
@@ -6,6 +7,11 @@
  *
  */
 
-export const BASE_BLOCK = [1, 1]
+export const BASE_BLOCK: [number, number] = [1, 1]
 
-export type Grid = number[][][]
+export type GridCell = {
+  value: [number, number]
+  className: string
+}
+
+export type Grid = GridCell[][]
